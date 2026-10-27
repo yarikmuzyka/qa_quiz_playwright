@@ -1,8 +1,10 @@
 # QA Quiz — Playwright Tests
 
-End-to-end tests for [QA Quiz](https://yarikmuzyka.github.io/quiz/), built with Playwright and TypeScript using the Page Object Model. Scenarios cover localization, quiz flows, challenges, feedback, and Bug Hunt.
+End-to-end tests for [QA Quiz](https://yarikmuzyka.github.io/quiz/), built with Playwright and TypeScript. Scenarios cover localization, quiz flows, challenges, feedback, and Bug Hunt.
 
 The project explores AI-assisted test planning, generation, and repair through Playwright MCP agents in VS Code. Running the tests requires neither MCP nor an AI subscription.
+
+The `main` branch contains the original generated tests. The [ai_page_object_refactoring](https://github.com/yarikmuzyka/qa_quiz_playwright/tree/ai_page_object_refactoring) branch organizes tests into Page Objects, reusable components, and fixtures.
 
 ## Setup
 
@@ -17,7 +19,7 @@ npx playwright install
 
 ```bash
 npm test                  # Chromium, headless
-npm run test:all          # Chromium and WebKit
+npx playwright test      # Chromium and WebKit
 npm run test:headed       # Visible Chromium browser
 npm run test:ui           # Interactive test runner
 npm run test:debug        # Step-by-step debugging
@@ -31,16 +33,18 @@ Run a specific test file:
 npm test -- tests/landing/topic-round-setup.spec.ts
 ```
 
-Failed tests retry twice. Screenshots are captured on failure; traces are recorded on the first retry. Tests run against the deployed application configured in `playwright.config.ts`.
+Failed tests retry twice in CI; local retries are disabled. Screenshots are captured on failure; traces are recorded on the first retry. Tests navigate directly to the deployed application.
+
+Note: `npm run test:all` currently includes Firefox, which is not configured. Use `npx playwright test` to run both configured browsers.
 
 ## Structure
 
 ```text
-pages/          Page Objects and user actions
-components/     Reusable UI components
-fixtures/       Test-scoped Page Object fixtures
-tests/         Scenarios and assertions
+tests/          Test specs with inline locators and UI actions
+specs/          Test planning documentation
 .github/agents/ Planner, Generator, and Healer instructions
+playwright.config.ts  Browser projects, retries, and reporting
+tsconfig.json         TypeScript configuration
 ```
 
-Import `test` and `expect` from `fixtures/test.ts`. Keep locators and UI actions in Page Objects, and scenario assertions in specs. See [AGENTS.md](AGENTS.md) for conventions and [tests/seed.spec.ts](tests/seed.spec.ts) for an example.
+Tests import `test` and `expect` directly from `@playwright/test`. Add scenarios under `tests/` using the `*.spec.ts` naming convention. The seed file at `tests/seed.spec.ts` is a placeholder for test generation.
