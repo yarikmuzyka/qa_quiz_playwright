@@ -23,7 +23,7 @@ npx playwright install
 
 ```bash
 npm test                  # Тести у Chromium
-npm run test:all          # Chromium, Firefox, WebKit
+npm run test:all          # Chromium, WebKit
 npm run test:headed       # Тести з відкритими браузерами
 npm run test:ui           # Інтерактивний інтерфейс Playwright
 npm run test:debug        # Покрокове налагодження
@@ -35,7 +35,7 @@ npm run report            # HTML-звіт останнього запуску
 
 ```bash
 npm test -- --project=chromium
-npm test -- tests/example.spec.ts --project=chromium
+npm test -- tests/seed.spec.ts --project=chromium
 ```
 
 Генерація тесту через запис дій у браузері:
@@ -46,9 +46,27 @@ npm run codegen -- https://example.com
 
 ## Структура
 
-- `tests/example.spec.ts` — перший тест із локальною HTML-сторінкою, локаторами, кліком і перевірками.
-- `playwright.config.ts` — браузери, повторні спроби в CI та звіти.
+- `tests/` — сценарії та assertions; сценарії взаємодіють із сайтом через Page Objects.
+- `pages/` — сторінки та значущі користувацькі дії.
+- `components/` — повторно використовувані компоненти інтерфейсу, зокрема діалоги.
+- `fixtures/test.ts` — test-scoped fixtures, що створюють Page Objects для стандартного `page`.
+- `tests/seed.spec.ts` — робочий приклад структури нового згенерованого тесту.
+- `playwright.config.ts` — базова URL-адреса, браузери, повторні спроби в CI та звіти.
 - `tsconfig.json` — сувора перевірка типів TypeScript.
+
+Новий тест імпортує розширені `test` і `expect` з fixture та використовує Page Objects для взаємодії; сценарні кроки й очікування залишаються у spec:
+
+```ts
+import { expect, test } from '../fixtures/test';
+
+test('Open the landing page', async ({ landingPage }) => {
+  // 1. Open the landing page.
+  await landingPage.open();
+
+  // 2. Verify the page title.
+  await expect(landingPage.title).toHaveTitle('QA Quiz — interview prep for QA engineers');
+});
+```
 
 Додавай нові тести у `tests/` з назвою `*.spec.ts`.
 Playwright автоматично запускає TypeScript-тести, але перевірку типів потрібно запускати окремо через `npm run typecheck`.
