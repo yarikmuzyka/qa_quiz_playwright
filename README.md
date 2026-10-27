@@ -1,54 +1,46 @@
-# Практика Playwright + TypeScript
+# QA Quiz — Playwright Tests
 
-Навчальний проєкт для практики автоматизації тестування з Playwright та TypeScript.
+End-to-end tests for [QA Quiz](https://yarikmuzyka.github.io/quiz/), built with Playwright and TypeScript using the Page Object Model. Scenarios cover localization, quiz flows, challenges, feedback, and Bug Hunt.
 
-## Як створено тести
+The project explores AI-assisted test planning, generation, and repair through Playwright MCP agents in VS Code. Running the tests requires neither MCP nor an AI subscription.
 
-Тести повністю згенеровані AI-агентами у VS Code через Playwright MCP. MCP надає агентам інструменти для дослідження сайту та взаємодії з браузером; код тестів створює AI.
+## Setup
 
-Для роботи налаштовано три агенти: **Planner** — підготовка тест-плану, **Generator** — генерація тестів, **Healer** — аналіз і виправлення падінь.
-
-Мета проєкту — дослідити цей процес і практикувати перевірку та розуміння згенерованих тестів. Для запуску готових тестів MCP та AI-підписка не потрібні.
-
-## Встановлення
-
-Потрібен Node.js 22 або новіший підтримуваний LTS.
+Requires Node.js 22+ (LTS) and npm.
 
 ```bash
 npm ci
 npx playwright install
 ```
 
-## Запуск
+## Run
 
 ```bash
-npm test                  # Тести у Chromium
-npm run test:all          # Chromium, Firefox, WebKit
-npm run test:headed       # Тести з відкритими браузерами
-npm run test:ui           # Інтерактивний інтерфейс Playwright
-npm run test:debug        # Покрокове налагодження
-npm run typecheck         # Перевірка TypeScript
-npm run report            # HTML-звіт останнього запуску
+npm test                  # Chromium, headless
+npm run test:all          # Chromium and WebKit
+npm run test:headed       # Visible Chromium browser
+npm run test:ui           # Interactive test runner
+npm run test:debug        # Step-by-step debugging
+npm run typecheck         # TypeScript validation
+npm run report            # Latest HTML report
 ```
 
-Окремий браузер або файл:
+Run a specific test file:
 
 ```bash
-npm test -- --project=chromium
-npm test -- tests/example.spec.ts --project=chromium
+npm test -- tests/landing/topic-round-setup.spec.ts
 ```
 
-Генерація тесту через запис дій у браузері:
+Failed tests retry twice. Screenshots are captured on failure; traces are recorded on the first retry. Tests run against the deployed application configured in `playwright.config.ts`.
 
-```bash
-npm run codegen -- https://example.com
+## Structure
+
+```text
+pages/          Page Objects and user actions
+components/     Reusable UI components
+fixtures/       Test-scoped Page Object fixtures
+tests/         Scenarios and assertions
+.github/agents/ Planner, Generator, and Healer instructions
 ```
 
-## Структура
-
-- `tests/example.spec.ts` — перший тест із локальною HTML-сторінкою, локаторами, кліком і перевірками.
-- `playwright.config.ts` — браузери, повторні спроби в CI та звіти.
-- `tsconfig.json` — сувора перевірка типів TypeScript.
-
-Додавай нові тести у `tests/` з назвою `*.spec.ts`.
-Playwright автоматично запускає TypeScript-тести, але перевірку типів потрібно запускати окремо через `npm run typecheck`.
+Import `test` and `expect` from `fixtures/test.ts`. Keep locators and UI actions in Page Objects, and scenario assertions in specs. See [AGENTS.md](AGENTS.md) for conventions and [tests/seed.spec.ts](tests/seed.spec.ts) for an example.
