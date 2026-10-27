@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+
+# Playwright reports, artifacts and browser caches
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+.playwright-mcp/
+.playwright/
+
+# Build output and TypeScript cache
+dist/
+coverage/
+*.tsbuildinfo
+
+# Local environment and authentication state
+.env
+.env.*
+!.env.example
+playwright/.auth/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Local editor and OS files
+.idea/
+.vscode/*
+!.vscode/mcp.json
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
