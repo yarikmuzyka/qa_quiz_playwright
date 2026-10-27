@@ -126,14 +126,19 @@ export class LandingPage {
   }
 
   async openWithClearedStorage(): Promise<void> {
-    await this.page.addInitScript(() => localStorage.clear());
+    await this.page.addInitScript(() => {
+      if (!sessionStorage.getItem('quiz-test-storage-cleared')) {
+        localStorage.clear();
+        sessionStorage.setItem('quiz-test-storage-cleared', 'true');
+      }
+    });
     await this.open();
   }
 
   topicButton(topic: TopicSlug): Locator {
     return {
-      'testing-theory': this.page.getByRole('button', { name: '···· testing-theory.spec —' }),
-      'ai-in-testing': this.page.getByRole('button', { name: '···· ai-in-testing.spec —' }),
+      'testing-theory': this.page.getByRole('button', { name: /testing-theory\.spec/ }),
+      'ai-in-testing': this.page.getByRole('button', { name: /ai-in-testing\.spec/ }),
     }[topic];
   }
 

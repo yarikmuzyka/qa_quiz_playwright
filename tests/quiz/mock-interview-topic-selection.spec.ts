@@ -46,7 +46,8 @@ test.describe('Topic quiz, scoring, and results', () => {
     await expect(quizPage.answerButtons).toHaveCount(4);
     await quizPage.selectFirstAnswer();
     await quizPage.submitAnswer();
-    await expect(quizPage.correctCounter.or(quizPage.incorrectCounter)).toBeVisible();
+    await expect(quizPage.correctCounter).toBeVisible();
+    await expect(quizPage.incorrectCounter).toBeVisible();
     await quizPage.finishRound();
     await expect(quizPage.resultStatus).toBeVisible();
     await quizPage.returnHome();

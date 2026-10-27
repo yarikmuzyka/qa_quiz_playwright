@@ -30,7 +30,7 @@ test.describe('Render a fresh landing page and switch languages', () => {
 
     // 2. Click the language toggle twice and verify each locale and the unchanged topic set and progress.
     await landingPage.toggleToUkrainian();
-    await expect(landingPage.englishLanguageButton).toBeVisible();
+    await expect(landingPage.ukrainianLanguageButton).toBeVisible();
     await expect(landingPage.ukrainianBestScoreLabel).toBeVisible();
     await expect(landingPage.ukrainianSessionsPlayedLabel).toBeVisible();
     await expect(landingPage.ukrainianTopicsCoveredLabel).toBeVisible();
@@ -48,7 +48,7 @@ test.describe('Render a fresh landing page and switch languages', () => {
     expect(await landingPage.topicButtons.allTextContents()).toEqual(initialTopics);
     await expect(landingPage.topicsCoveredCount).toBeVisible();
     await landingPage.toggleToEnglish();
-    await expect(landingPage.ukrainianLanguageButton).toBeVisible();
+    await expect(landingPage.englishLanguageButton).toBeVisible();
     await expect(landingPage.bestScoreLabel).toBeVisible();
     await expect(landingPage.challengeButton).toBeVisible();
     await expect(landingPage.topicButtons).toHaveCount(14);
@@ -57,10 +57,10 @@ test.describe('Render a fresh landing page and switch languages', () => {
 
     // 3. Select Ukrainian and reload the page, then verify the app and persisted locale and progress.
     await landingPage.toggleToUkrainian();
-    await expect(landingPage.englishLanguageButton).toBeVisible();
+    await expect(landingPage.ukrainianLanguageButton).toBeVisible();
     await landingPage.reload();
     await expect(landingPage.title).toHaveTitle('QA Quiz — interview prep for QA engineers');
-    await expect(landingPage.englishLanguageButton).toBeVisible();
+    await expect(landingPage.ukrainianLanguageButton).toBeVisible();
     await expect(landingPage.ukrainianBestScoreLabel).toBeVisible();
     await expect(landingPage.topicsCoveredCount).toBeVisible();
     await expect(landingPage.topicButtons).toHaveCount(14);

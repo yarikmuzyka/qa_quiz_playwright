@@ -30,7 +30,8 @@ test.describe('Topic quiz, scoring, and results', () => {
     await expect(quizPage.answerFeedback).toContainText(/✓ PASS|✗ FAIL/);
     await expect(quizPage.answeredOptionButtons.first()).toBeDisabled();
     await expect(quizPage.nextQuestionButton).toBeVisible();
-    await expect(quizPage.correctCounter.or(quizPage.incorrectCounter)).toBeVisible();
+    await expect(quizPage.correctCounter).toBeVisible();
+    await expect(quizPage.incorrectCounter).toBeVisible();
 
     // 4. Advance through the round until all 10 questions have been answered.
     for (let question = 1; question < 10; question += 1) {

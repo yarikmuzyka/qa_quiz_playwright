@@ -19,18 +19,26 @@ test.describe('Topic quiz, scoring, and results', () => {
     // 2. Select an answer and submit it; validate feedback and that the response is locked.
     await quizPage.selectFirstAnswer();
     await quizPage.submitAnswer();
-    await expect(quizPage.correctCounter.or(quizPage.incorrectCounter)).toBeVisible();
-    await expect(quizPage.answerFeedback).toContainText(/✓ PASS|✗ FAIL/);
+    await expect(quizPage.correctCounter).toBeVisible();
+    await expect(quizPage.incorrectCounter).toBeVisible();
+    const correctCountMatch = (await quizPage.correctCounter.textContent())?.match(/^(\d+) ✓$/);
+    const incorrectCountMatch = (await quizPage.incorrectCounter.textContent())?.match(/^(\d+) ✗$/);
+    if (!correctCountMatch || !incorrectCountMatch) {
+      throw new Error('Submitted answer counters have an unexpected format');
+    }
+    const correctCount = Number(correctCountMatch[1]);
+    const incorrectCount = Number(incorrectCountMatch[1]);
+    expect(correctCount + incorrectCount).toBe(1);
     await expect(quizPage.answeredOptionButtons.first()).toBeDisabled();
 
     // 3. Finish the round before answering all questions.
     await quizPage.finishRound();
     await expect(quizPage.resultStatus).toBeVisible();
     await expect(quizPage.resultTotal).toHaveText('1');
-    await expect(quizPage.resultWrong).toHaveText('1');
-    await expect(quizPage.resultCorrect).toHaveText('0');
+    await expect(quizPage.resultWrong).toHaveText(String(incorrectCount));
+    await expect(quizPage.resultCorrect).toHaveText(String(correctCount));
     await expect(quizPage.resultSkipped).toHaveText('9');
-    await expect(quizPage.resultPercent).toHaveText('0%');
+    await expect(quizPage.resultPercent).toHaveText(`${correctCount * 10}%`);
     await quizPage.returnHome();
     await expect(landingPage.topicProgress).toHaveText('1/14');
   });

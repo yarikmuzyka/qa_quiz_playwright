@@ -22,6 +22,6 @@ export class BugHuntPanel {
   }
 
   async startMission(): Promise<void> {
-    await this.startButton.click();
+    await this.startButton.press('Enter');
   }
 }
